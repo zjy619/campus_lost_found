@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ "失物大厅" if kind == "lost" else "招领大厅" }}
+{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <h2>{{ "失物信息大厅" if kind == "lost" else "招领信息大厅" }}</h2>
+    </div>
+
+    <form method="get" class="search-bar">
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="关键词：物品名称 / 描述">
+
+        <select name="category">
+            <option value="">全部类别</option>
+            {% for c in all_categories %}
+            <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="location" value="{{ location }}" placeholder="地点">
+
+        <button class="btn btn-primary" type="submit">查询</button>
+    </form>
+
+    <div class="card-list">
+        {% for item in items %}
+        <a class="item-card link-card" href="{{ url_for('detail', kind=kind, item_id=item.id) }}">
+            <div class="item-top">
+                <h3>{{ item.item_name }}</h3>
+                <span class="badge">{{ item.status }}</span>
+            </div>
+
+            <div class="item-meta">
+                <span>类别：{{ item.category }}</span>
+                <span>颜色：{{ item.color or "未填写" }}</span>
+                <span>日期：{{ item.event_date }}</span>
+            </div>
+
+            <div class="item-meta">
+                <span>地点：{{ item.location }}</span>
+                <span>联系人：{{ item.contact }}</span>
+            </div>
+
+            <p class="item-desc">{{ item.description or "暂无详细描述" }}</p>
+        </a>
+        {% else %}
+        <div class="empty-box">暂无数据</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

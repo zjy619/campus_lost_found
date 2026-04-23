@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}后台管理{% endblock %}
+
+{% block content %}
+<div class="panel admin-topbar">
+    <div class="panel-header">
+        <h2>后台管理</h2>
+        <a class="btn btn-secondary btn-small" href="{{ url_for('admin_logout') }}">退出登录</a>
+    </div>
+</div>
+
+<div class="grid-two">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>失物信息管理</h2>
+        </div>
+
+        {% for item in lost_items %}
+        <div class="admin-card">
+            <div class="item-top">
+                <strong>{{ item.item_name }}</strong>
+                <span class="badge">{{ item.status }}</span>
+            </div>
+            <p>{{ item.category }}｜{{ item.location }}｜{{ item.event_date }}</p>
+
+            <div class="admin-actions">
+                <form method="post" action="{{ url_for('update_status', kind='lost', item_id=item.id) }}">
+                    <select name="status">
+                        <option value="未找回" {% if item.status == "未找回" %}selected{% endif %}>未找回</option>
+                        <option value="匹配中" {% if item.status == "匹配中" %}selected{% endif %}>匹配中</option>
+                        <option value="已找回" {% if item.status == "已找回" %}selected{% endif %}>已找回</option>
+                    </select>
+                    <button class="btn btn-small btn-primary" type="submit">更新状态</button>
+                </form>
+
+                <div class="admin-inline">
+                    <a class="btn btn-small btn-secondary" href="{{ url_for('detail', kind='lost', item_id=item.id) }}">详情</a>
+                    <form method="post" action="{{ url_for('delete_item', kind='lost', item_id=item.id) }}">
+                        <button class="btn btn-small btn-danger" type="submit">删除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-box">暂无失物记录</div>
+        {% endfor %}
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <h2>招领信息管理</h2>
+        </div>
+
+        {% for item in found_items %}
+        <div class="admin-card">
+            <div class="item-top">
+                <strong>{{ item.item_name }}</strong>
+                <span class="badge">{{ item.status }}</span>
+            </div>
+            <p>{{ item.category }}｜{{ item.location }}｜{{ item.event_date }}</p>
+
+            <div class="admin-actions">
+                <form method="post" action="{{ url_for('update_status', kind='found', item_id=item.id) }}">
+                    <select name="status">
+                        <option value="待认领" {% if item.status == "待认领" %}selected{% endif %}>待认领</option>
+                        <option value="匹配中" {% if item.status == "匹配中" %}selected{% endif %}>匹配中</option>
+                        <option value="已认领" {% if item.status == "已认领" %}selected{% endif %}>已认领</option>
+                    </select>
+                    <button class="btn btn-small btn-primary" type="submit">更新状态</button>
+                </form>
+
+                <div class="admin-inline">
+                    <a class="btn btn-small btn-secondary" href="{{ url_for('detail', kind='found', item_id=item.id) }}">详情</a>
+                    <form method="post" action="{{ url_for('delete_item', kind='found', item_id=item.id) }}">
+                        <button class="btn btn-small btn-danger" type="submit">删除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-box">暂无招领记录</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

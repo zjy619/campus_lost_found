@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}智能匹配{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <h2>智能匹配结果</h2>
+    </div>
+
+    <form method="get" class="search-bar">
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="关键词：物品名称 / 描述 / 地点">
+
+        <select name="category">
+            <option value="">全部类别</option>
+            {% for c in all_categories %}
+            <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="min_score">
+            <option value="35" {% if min_score == 35 %}selected{% endif %}>最低分数 35</option>
+            <option value="50" {% if min_score == 50 %}selected{% endif %}>最低分数 50</option>
+            <option value="70" {% if min_score == 70 %}selected{% endif %}>最低分数 70</option>
+        </select>
+
+        <button class="btn btn-primary" type="submit">筛选匹配</button>
+    </form>
+
+    {% if results %}
+        {% for row in results %}
+        <div class="match-block">
+            <div class="match-lost">
+                <h3>待匹配失物：{{ row.lost.item_name }}</h3>
+                <p>类别：{{ row.lost.category }}</p>
+                <p>地点：{{ row.lost.location }}</p>
+                <p>日期：{{ row.lost.event_date }}</p>
+                <p>描述：{{ row.lost.description or "暂无" }}</p>
+                <a class="btn btn-secondary btn-small mt-12" href="{{ url_for('detail', kind='lost', item_id=row.lost.id) }}">查看失物详情</a>
+            </div>
+
+            <div class="match-right">
+                {% for candidate in row.candidates %}
+                <div class="match-card">
+                    <div class="match-score">匹配分数：{{ candidate.score }}</div>
+                    <div><strong>{{ candidate.found.item_name }}</strong></div>
+                    <div>地点：{{ candidate.found.location }}</div>
+                    <div>日期：{{ candidate.found.event_date }}</div>
+                    <div>原因：{{ candidate.reasons }}</div>
+                    <div>联系人：{{ candidate.found.contact }}</div>
+                    <a class="btn btn-primary btn-small mt-12" href="{{ url_for('detail', kind='found', item_id=candidate.found.id) }}">查看招领详情</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-box">暂无符合条件的匹配结果。</div>
+    {% endif %}
+</div>
+{% endblock %}

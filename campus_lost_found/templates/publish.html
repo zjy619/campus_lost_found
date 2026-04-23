@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ "发布失物信息" if kind == "lost" else "发布招领信息" }}
+{% endblock %}
+
+{% block content %}
+<div class="panel form-panel">
+    <div class="panel-header">
+        <h2>{{ "发布失物信息" if kind == "lost" else "发布招领信息" }}</h2>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="form-grid">
+        <div class="form-item">
+            <label>物品名称</label>
+            <input type="text" name="item_name" placeholder="例如：校园卡、耳机、保温杯" required>
+        </div>
+
+        <div class="form-item">
+            <label>类别</label>
+            <select name="category" required>
+                <option value="">请选择类别</option>
+                <option>证件卡类</option>
+                <option>电子产品</option>
+                <option>书本文具</option>
+                <option>日用品</option>
+                <option>衣物配饰</option>
+                <option>钥匙门禁</option>
+                <option>其他</option>
+            </select>
+        </div>
+
+        <div class="form-item">
+            <label>颜色</label>
+            <input type="text" name="color" placeholder="例如：白色、黑色、银色">
+        </div>
+
+        <div class="form-item">
+            <label>{{ "丢失日期" if kind == "lost" else "拾取日期" }}</label>
+            <input type="date" name="event_date" required>
+        </div>
+
+        <div class="form-item full">
+            <label>{{ "丢失地点" if kind == "lost" else "拾取地点" }}</label>
+            <input type="text" name="location" placeholder="例如：图书馆三楼、博文302、教学楼B座大厅" required>
+        </div>
+
+        <div class="form-item full">
+            <label>物品描述</label>
+            <textarea name="description" rows="5" placeholder="请尽量写清楚外观、品牌、挂件、细节特征等"></textarea>
+        </div>
+
+        <div class="form-item full">
+            <label>联系方式</label>
+            <input type="text" name="contact" placeholder="例如：王同学 177xxxxxxx" required>
+        </div>
+
+        <div class="form-item full">
+            <label>上传照片（可选）</label>
+            <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
+        </div>
+
+        <div class="form-actions full">
+            <button class="btn btn-primary" type="submit">确认提交</button>
+            <a class="btn btn-secondary" href="{{ url_for('index') }}">返回首页</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

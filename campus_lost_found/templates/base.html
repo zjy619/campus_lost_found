@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}山东建筑大学校园失物招领系统{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div class="brand">
+                <img class="brand-logo-img" src="{{ url_for('static', filename='images/logo.png') }}" alt="校徽">
+                <div>
+                    <div class="brand-title">山东建筑大学校园失物招领系统</div>
+                    <div class="brand-subtitle">Shandong Jianzhu University Lost &amp; Found</div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="{{ url_for('index') }}">首页</a>
+                <a href="{{ url_for('publish', kind='lost') }}">发布失物</a>
+                <a href="{{ url_for('publish', kind='found') }}">发布招领</a>
+                <a href="{{ url_for('list_items', kind='lost') }}">失物大厅</a>
+                <a href="{{ url_for('list_items', kind='found') }}">招领大厅</a>
+                <a href="{{ url_for('match_page') }}">智能匹配</a>
+                <a href="{{ url_for('manage_lookup') }}">我的信息管理</a>
+                <a href="{{ url_for('admin') }}">后台管理</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-group">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

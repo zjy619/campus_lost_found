@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}管理员登录{% endblock %}
+
+{% block content %}
+<div class="panel form-panel admin-login-panel">
+    <h2>管理员登录</h2>
+    <form method="post" class="form-grid single-col">
+        <div class="form-item full">
+            <label>账号</label>
+            <input type="text" name="username">
+        </div>
+        <div class="form-item full">
+            <label>密码</label>
+            <input type="password" name="password">
+        </div>
+        <div class="form-actions full">
+            <button class="btn btn-primary" type="submit">登录</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

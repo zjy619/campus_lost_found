@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 山东建筑大学校园失物招领系统{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1>面向校园真实场景的失物招领智能管理系统</h1>
+        <p>
+            解决校园失物信息分散、查找困难、匹配效率低的问题，
+            提供失物发布、招领管理、条件检索、智能匹配和后台管理等功能。
+        </p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="{{ url_for('publish', kind='lost') }}">立即发布失物</a>
+            <a class="btn btn-secondary" href="{{ url_for('match_page') }}">查看匹配结果</a>
+            <a class="btn btn-secondary" href="{{ url_for('manage_lookup') }}">我的信息管理</a>
+        </div>
+    </div>
+
+    <div class="hero-panel">
+        <div class="stat-card"><div class="stat-num">{{ lost_total }}</div><div class="stat-label">失物总数</div></div>
+        <div class="stat-card"><div class="stat-num">{{ found_total }}</div><div class="stat-label">招领总数</div></div>
+        <div class="stat-card"><div class="stat-num">{{ unresolved_lost }}</div><div class="stat-label">待找回</div></div>
+        <div class="stat-card"><div class="stat-num">{{ unclaimed_found }}</div><div class="stat-label">待认领</div></div>
+    </div>
+</section>
+
+<section class="grid-two">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>最新失物信息</h2>
+            <a href="{{ url_for('list_items', kind='lost') }}">查看全部</a>
+        </div>
+        <div class="list-simple">
+            {% for item in recent_lost %}
+            <a class="simple-item link-card" href="{{ url_for('detail', kind='lost', item_id=item.id) }}">
+                <div class="simple-title">{{ item.item_name }}</div>
+                <div class="simple-meta">{{ item.category }}｜{{ item.location }}｜{{ item.event_date }}</div>
+            </a>
+            {% else %}
+            <div class="empty-box">暂无数据</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <h2>最新招领信息</h2>
+            <a href="{{ url_for('list_items', kind='found') }}">查看全部</a>
+        </div>
+        <div class="list-simple">
+            {% for item in recent_found %}
+            <a class="simple-item link-card" href="{{ url_for('detail', kind='found', item_id=item.id) }}">
+                <div class="simple-title">{{ item.item_name }}</div>
+                <div class="simple-meta">{{ item.category }}｜{{ item.location }}｜{{ item.event_date }}</div>
+            </a>
+            {% else %}
+            <div class="empty-box">暂无数据</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

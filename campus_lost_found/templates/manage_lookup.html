@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}我的信息管理{% endblock %}
+
+{% block content %}
+<div class="panel form-panel">
+    <h2>我的信息管理</h2>
+    <p class="help-text">输入信息类型、信息ID和管理码后，可删除自己的帖子或修改状态。</p>
+
+    <form method="post" class="form-grid">
+        <div class="form-item">
+            <label>信息类型</label>
+            <select name="kind">
+                <option value="lost">失物信息</option>
+                <option value="found">招领信息</option>
+            </select>
+        </div>
+
+        <div class="form-item">
+            <label>信息ID</label>
+            <input type="number" name="item_id">
+        </div>
+
+        <div class="form-item full">
+            <label>管理码</label>
+            <input type="text" name="manage_code" placeholder="例如 A1B2C3">
+        </div>
+
+        <div class="form-actions full">
+            <button class="btn btn-primary" type="submit">查询我的信息</button>
+        </div>
+    </form>
+
+    {% if item %}
+    <div class="manage-result">
+        <h3>{{ item.item_name }}</h3>
+        <p>{{ item.category }}｜{{ item.location }}｜{{ item.event_date }}</p>
+        <p>当前状态：{{ item.status }}</p>
+
+        <div class="manage-actions-grid">
+            <form method="post" action="{{ url_for('manage_action', kind=kind, item_id=item.id) }}">
+                <input type="hidden" name="manage_code" value="{{ item.manage_code }}">
+                <input type="hidden" name="action" value="status">
+                <select name="status">
+                    {% if kind == "lost" %}
+                    <option value="未找回">未找回</option>
+                    <option value="匹配中">匹配中</option>
+                    <option value="已找回">已找回</option>
+                    {% else %}
+                    <option value="待认领">待认领</option>
+                    <option value="匹配中">匹配中</option>
+                    <option value="已认领">已认领</option>
+                    {% endif %}
+                </select>
+                <button class="btn btn-primary btn-small" type="submit">修改状态</button>
+            </form>
+
+            <form method="post" action="{{ url_for('manage_action', kind=kind, item_id=item.id) }}">
+                <input type="hidden" name="manage_code" value="{{ item.manage_code }}">
+                <input type="hidden" name="action" value="delete">
+                <button class="btn btn-danger btn-small" type="submit">删除该信息</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

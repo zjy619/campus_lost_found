@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}详情{% endblock %}
+
+{% block content %}
+<div class="panel detail-panel">
+    <div class="detail-layout">
+        <div class="detail-image-box">
+            {% if item.image_filename %}
+                <img class="detail-image" src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}" alt="物品图片">
+            {% else %}
+                <div class="no-image">暂无图片</div>
+            {% endif %}
+        </div>
+
+        <div class="detail-info">
+            <h2>{{ item.item_name }}</h2>
+
+            <div class="detail-tags">
+                <span class="badge">{{ item.status }}</span>
+                <span class="badge">{{ "失物信息" if kind == "lost" else "招领信息" }}</span>
+            </div>
+
+            <div class="detail-grid">
+                <div><strong>信息ID：</strong>{{ item.id }}</div>
+                <div><strong>类别：</strong>{{ item.category }}</div>
+
+                <div><strong>颜色：</strong>{{ item.color or "未填写" }}</div>
+                <div><strong>日期：</strong>{{ item.event_date }}</div>
+
+                <div class="full"><strong>地点：</strong>{{ item.location }}</div>
+                <div class="full"><strong>联系方式：</strong>{{ item.contact }}</div>
+                <div class="full"><strong>描述：</strong>{{ item.description or "暂无详细描述" }}</div>
+            </div>
+
+            <div class="detail-manage-box">
+                <h3>发布者管理信息</h3>
+                <p>信息ID：<strong>{{ item.id }}</strong></p>
+                <p>管理码：<strong>{{ item.manage_code }}</strong></p>
+                <p class="help-text">
+                    请保存该管理码。后续可在“我的信息管理”页面中，凭 信息ID + 管理码
+                    修改状态或删除自己发布的信息。
+                </p>
+            </div>
+
+            <div class="hero-actions mt-12">
+                <a class="btn btn-secondary" href="{{ url_for('list_items', kind=kind) }}">返回列表</a>
+                <a class="btn btn-secondary" href="{{ url_for('manage_lookup') }}">我的信息管理</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
