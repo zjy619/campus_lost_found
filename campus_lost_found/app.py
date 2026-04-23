@@ -550,5 +550,6 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    # host='0.0.0.0' 必须加，否则 Render 访问不到
+    # port 用 10000（Render 推荐端口）
+    app.run(host='0.0.0.0', port=10000)
