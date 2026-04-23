@@ -549,7 +549,8 @@ with app.app_context():
     init_db()
 
 
+import os  # 建议加在文件最顶部，和其他 import 放一起
+
 if __name__ == "__main__":
-    # host='0.0.0.0' 必须加，否则 Render 访问不到
-    # port 用 10000（Render 推荐端口）
-    app.run(host='0.0.0.0', port=10000)
+    port = int(os.environ.get("PORT", 10000))  # 优先用 Render 分配的端口，默认 10000
+    app.run(host='0.0.0.0', port=port)
